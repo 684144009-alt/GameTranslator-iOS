@@ -1,0 +1,24 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+        
+      - name: Generate Project
+        run: tuist generate
+        
+      - name: Build App
+        run: |
+          xcodebuild build -project GameTranslator.xcodeproj \
+          -scheme GameTranslator \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_ALLOWED=NO
